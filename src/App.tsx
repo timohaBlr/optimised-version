@@ -1,26 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {DrawerAppBar} from "./components/Header/Header";
+import {InputWithIcon} from "./components/InputWithIcon/InputWithIcon";
+import {Outlet} from "react-router-dom";
+import {PaginationPages, TablePaginationComponent} from "./components/PaginationLink";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    console.log('app rendered')
+
+
+    return (
+        <div className="App">
+            <DrawerAppBar/>
+            <InputWithIcon/>
+            <Outlet/>
+            < PaginationPages/>
+            <TablePaginationComponent/>
+        </div>
+    );
 }
 
 export default App;
