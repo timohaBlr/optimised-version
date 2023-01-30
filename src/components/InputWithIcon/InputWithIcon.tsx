@@ -28,21 +28,17 @@ export const InputWithIcon = React.memo(() => {
     const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const value = event.currentTarget.value
         dispatch(setFilteredItemTC(value))
+        //condition to prevent incorrect setting of searchParams
         if (!Number.isNaN(Number(value))) {
             setSearchParams({...Object.fromEntries(searchParams), id: value})
         }
     }
     const blurHandler = () => {
-        if (error === 'Accept only integers') {
-            console.log('Accept only integers')
-           dispatch( setErrorAC(null))
-        } else if (searchFieldValue === '') {
+        if (searchFieldValue === '') {
             dispatch(setFilteredItemAC(null))
-            dispatch(setErrorAC(''))
+            dispatch(setErrorAC(null))
             setSearchParams({page: '' + page})
         }
-
-
     }
 
     return (

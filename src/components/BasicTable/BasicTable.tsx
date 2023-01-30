@@ -1,4 +1,4 @@
-import React, {MouseEvent, useMemo} from 'react';
+import React, { useMemo} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -11,16 +11,16 @@ import {AppRootStateType} from "../../bll/store";
 import {initialStateFetchingTC, initialStateType, setFilteredItemTC} from "../../redux/reducers/items-reducer";
 import {useEffect} from "react";
 import {useSearchParams} from "react-router-dom";
-import {setPageAC} from "../../redux/reducers/Actions";
 import {Dispatch} from "redux";
+import {openModalAC, setRowToModalAC} from "../../redux/reducers/Actions";
 
 
 export const BasicTable = React.memo(() => {
 
-    const {data, filteredItem, per_page} = useSelector<AppRootStateType, initialStateType>(state => state.items)
+    const {data, filteredItem, per_page, page} = useSelector<AppRootStateType, initialStateType>(state => state.items)
     // why any is nessesary here?
     const dispatch: Dispatch<any> = useDispatch()
-    const [searchParams, setSearchParams] = useSearchParams()
+    const [searchParams] = useSearchParams()
     const pageFromURL = Number(searchParams.get('page'))
     const idFromURL = searchParams.get('id')
     useEffect(() => {
@@ -30,25 +30,30 @@ export const BasicTable = React.memo(() => {
         } else {
             dispatch(initialStateFetchingTC(per_page, pageFromURL))
         }
-    }, [dispatch, per_page, pageFromURL])
+    }, [dispatch, per_page, pageFromURL,idFromURL, page])
 
 
     //items to render
     const mappedRows = useMemo(() => (filteredItem
         ? [filteredItem]
-        : data).map((row) => (
-        <TableRow
+        : data).map((row) => {
+        const rowClickHandler = () => {
+            dispatch(openModalAC(true))
+            dispatch(setRowToModalAC(row))
+        }
+        return (<TableRow
             key={row.id}
             sx={{'&:last-child td, &:last-child th': {border: 0}}}
             style={{backgroundColor: row.color}}
+            onClick={rowClickHandler}
         >
             <TableCell component="th" scope="row">
                 {row.id}
             </TableCell>
             <TableCell align="right">{row.name}</TableCell>
             <TableCell align="right">{row.year}</TableCell>
-        </TableRow>
-    )), [data, filteredItem])
+        </TableRow>)
+    }), [dispatch,data, filteredItem])
 
 
     const emptyRows = useMemo(() => per_page - mappedRows.length, [per_page, mappedRows])

@@ -94,7 +94,7 @@ export const itemsReducer = (state: initialStateType = initialState, action: Act
 
 type ThunkType = BaseThunkType<ActionTypes>
 export const initialStateFetchingTC = (per_page: number, page: number): ThunkType => {
-    return async (dispatch, getState) => {
+    return async (dispatch) => {
         dispatch(setGettingDataAC(true))
         let data;
         try {
@@ -111,7 +111,7 @@ export const initialStateFetchingTC = (per_page: number, page: number): ThunkTyp
     }
 }
 
-export const setFilteredItemTC = (value: string): ThunkType => {
+export const setFilteredItemTC = (value: string,): ThunkType => {
     //let it return Promise, to avoid special type declaration
     return async (dispatch, getState) => {
         const itemNotFound = {id: 999, name: 'We have not this item', year: 999, color: '#ba0a1f'}
@@ -148,10 +148,4 @@ export const setFilteredItemTC = (value: string): ThunkType => {
 
     }
 }
-export const filterItemsTC = (): ThunkType => {
-    return async (dispatch, getState) => {
-
-    }
-}
-
 
